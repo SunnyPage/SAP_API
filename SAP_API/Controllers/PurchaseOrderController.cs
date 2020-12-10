@@ -15,7 +15,7 @@ namespace SAP_API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class PurchaseOrderController : ControllerBase {
-
+        [Authorize]
         [HttpPost("search")]
         public async Task<IActionResult> GetSearch([FromBody] SearchRequest request) {
 
@@ -203,6 +203,7 @@ namespace SAP_API.Controllers
         }
 
         // GET: api/PurchaseOrder/
+        [Authorize]
         [HttpGet("CRMDetail/{id}")]
         public async Task<IActionResult> GetCRMDetail(int id) {
 
@@ -394,6 +395,7 @@ namespace SAP_API.Controllers
 
         // POST: api/PurchaseOrder
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post([FromBody] PurchaseOrder value) {
 
             SAPContext context = HttpContext.RequestServices.GetService(typeof(SAPContext)) as SAPContext;

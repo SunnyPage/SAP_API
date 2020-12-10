@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -41,6 +42,7 @@ namespace SAP_API.Controllers
 
         // GET: api/PaymentTerms/CRMList
         [HttpGet("List")]
+        [Authorize]
         public async Task<IActionResult> GetList() {
 
             SAPContext context = HttpContext.RequestServices.GetService(typeof(SAPContext)) as SAPContext;

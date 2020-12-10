@@ -25,6 +25,7 @@ namespace SAP_API.Controllers {
         /// <response code="200">OrderSearchResponse(SearchResponse)</response>
         // POST: api/Order/Search
         [ProducesResponseType(typeof(OrderSearchResponse), StatusCodes.Status200OK)]
+        [Authorize]
         [HttpPost("Search")] 
         public async Task<IActionResult> Search([FromBody] SearchRequest request) {
 
@@ -324,6 +325,7 @@ namespace SAP_API.Controllers {
         }
 
         // GET: api/Order/WMSDetail/5
+        [Authorize]
         [HttpGet("WMSDetail/{DocEntry}")]
         public async Task<IActionResult> GetWMSDetail(int DocEntry) {
 
@@ -450,6 +452,7 @@ namespace SAP_API.Controllers {
 
         // GET: api/Order/5
         // Orden Detalle
+        [Authorize]
         [HttpGet("CRMDetail/{id}")]
         public async Task<IActionResult> GetCRMDetail(int id) {
 
@@ -520,6 +523,7 @@ namespace SAP_API.Controllers {
         }
 
         // GET: api/Order/CRMOrderDaily
+        [Authorize]
         [HttpGet("CRMOrderDaily")]
         public async Task<IActionResult> GetCRMOrderDaily() {
 
@@ -948,6 +952,7 @@ namespace SAP_API.Controllers {
 
         // GET: api/Order/5
         // Orden Detalle
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id) {
 
@@ -1116,13 +1121,21 @@ namespace SAP_API.Controllers {
             result.Add(resultcredit);
             return result;
         }
-
+        /// <summary>
+        /// Este metodo es llamado por la Aplicacion CRM para agregar ordenes, realiza hasta 5 intentos de agregar la misma orden en caso de que despues
+        /// de 5 intentos no sea posible regresa la orden a la Aplicacion CRM para su posterior agregacion por parte del usuario.
+        /// Tambien realiza la separacion de las ordenes dependiendo del almacen al que vayan dirigidos separandola en hasta 4 ordenes diferentes dependiendo de los productos requeridos
+        /// </summary>
+        /// <param name="value">Recibe los parametros de la orden que se separara</param>
+        /// <returns></returns>
         // POST: api/Order/SeparateOrder
+        // TODO:Agregar Queues al procedimiento para apresurar su realizacion
+        [Authorize]
         [HttpPost("SeparateOrder")]
         public IActionResult OrderSeparation([FromBody] CreateOrder value)
         {
-            List<JToken> ordersCreated = new List<JToken>();
-
+           // List<JToken> ordersCreated = new List<JToken>();
+            Queue<CreateOrder> orders = new Queue<CreateOrder>();
             // Only in CEDIS
             var productsMeatMXN = new List<OrderRow>();
             var productsMeatUSD = new List<OrderRow>();
@@ -1167,6 +1180,7 @@ namespace SAP_API.Controllers {
                     {
                         cardcode = value.cardcode,
                         currency = "USD",
+                        type="Orden de carne en dolares",
                         payment = value.payment,
                         comments = value.comments,
                         date = value.date,
@@ -1174,10 +1188,9 @@ namespace SAP_API.Controllers {
                         priceList = value.priceList,
                         rows = productsMeatUSD
                     };
-
-                    ordersCreated.Add(CreateOrderNew(OrderProdMeatUSD));
-
-                }
+                        orders.Enqueue(OrderProdMeatUSD);
+                    //ordersCreated.Add(CreateOrderNew(OrderProdMeatUSD));
+                                    }
 
                 if (productsMeatMXN.Count != 0)
                 {
@@ -1185,6 +1198,7 @@ namespace SAP_API.Controllers {
                     {
                         cardcode = value.cardcode,
                         currency = "MXN",
+                        type = "Orden de carne en pesos",
                         payment = value.payment,
                         comments = value.comments,
                         date = value.date,
@@ -1192,8 +1206,8 @@ namespace SAP_API.Controllers {
                         priceList = value.priceList,
                         rows = productsMeatMXN
                     };
-
-                    ordersCreated.Add(CreateOrderNew(OrderProdMeatMXN));
+                                           orders.Enqueue(OrderProdMeatMXN);
+                    //ordersCreated.Add(CreateOrderNew(OrderProdMeatMXN));
 
                 }
 
@@ -1204,23 +1218,23 @@ namespace SAP_API.Controllers {
                         cardcode = value.cardcode,
                         currency = "USD",
                         payment = value.payment,
+                        type = "Orden de producto en dolares",
                         comments = value.comments,
                         date = value.date,
                         series = value.series,
                         priceList = value.priceList,
                         rows = productsNonMeatUSD
                     };
-
-                    ordersCreated.Add(CreateOrderNew(OrderProdNonMeatUSD));
-
+                    orders.Enqueue(OrderProdNonMeatUSD);
+                    //ordersCreated.Add(CreateOrderNew(OrderProdNonMeatUSD));
                 }
-
                 if (productsNonMeatMXN.Count != 0)
                 {
                     var OrderProdNonMeatMXN = new CreateOrder
                     {
                         cardcode = value.cardcode,
                         currency = "MXN",
+                        type = "Orden de producto en pesos",
                         payment = value.payment,
                         comments = value.comments,
                         date = value.date,
@@ -1228,9 +1242,8 @@ namespace SAP_API.Controllers {
                         priceList = value.priceList,
                         rows = productsNonMeatMXN
                     };
-
-                    ordersCreated.Add(CreateOrderNew(OrderProdNonMeatMXN));
-
+                        orders.Enqueue(OrderProdNonMeatMXN);
+                    //ordersCreated.Add(CreateOrderNew(OrderProdNonMeatMXN));
                 }
 
             } else
@@ -1245,13 +1258,13 @@ namespace SAP_API.Controllers {
                         productsMXN.Add(product);
                     }
                 }
-
                 if(productsUSD.Count != 0)
                 {
                     var OrderProdUSD = new CreateOrder
                     {
                         cardcode = value.cardcode,
                         currency = "USD",
+                        type = "Orden en dolares",
                         payment = value.payment,
                         comments = value.comments,
                         date = value.date,
@@ -1259,17 +1272,16 @@ namespace SAP_API.Controllers {
                         priceList = value.priceList,
                         rows = productsUSD
                     };
-
-                    ordersCreated.Add(CreateOrderNew(OrderProdUSD));
-
+                        orders.Enqueue(OrderProdUSD);
+                    //ordersCreated.Add(CreateOrderNew(OrderProdUSD));
                 }
-
                 if(productsMXN.Count != 0)
                 {
                     var OrderProdMXN = new CreateOrder
                     {
                         cardcode = value.cardcode,
                         currency = "MXN",
+                        type = "Orden en pesos",
                         payment = value.payment,
                         comments = value.comments,
                         date = value.date,
@@ -1277,31 +1289,60 @@ namespace SAP_API.Controllers {
                         priceList = value.priceList,
                         rows = productsMXN
                     };
-
-                    ordersCreated.Add(CreateOrderNew(OrderProdMXN));
-
+                        orders.Enqueue(OrderProdMXN);
+                    //ordersCreated.Add(CreateOrderNew(OrderProdMXN));
                 }
-
             }
-
-            foreach(var order in ordersCreated)
+            // Descomentar para probar el regreso de ordenes
+            //orders.Dequeue();
+            //return Ok(orders);
+            
+            //Recorre la fila mientras aun queden ordenes en ella o hasta que se hayan completado 3 vueltas.
+            //Cada iteracion recorre la fila llamando al metodo CreateOrderNew para intentar agregar la nueva orden a base de datos SAP.
+            //Verifica que se agrego en caso contrario saca la orden de la fila y la vuelve a ingresar al final de esta.
+            //En el caso de que sea agregada con exito solo saca la orden de la fila
+            int Iteracion = 0;
+            while (orders.Count > 0 && Iteracion < 12)
             {
-                if (order["RESULT"].ToString() == "False" && order["Status"].ToString() == "409")
+                var orderJToken = CreateOrderNew(orders.Peek());
+                if (orderJToken["RESULT"].ToString() == "False" && orderJToken["Status"].ToString() == "409")
                 {
-                    return Conflict(new { AUTH = order["Reason"] });
+                    return Conflict(new { AUTH = orderJToken["Reason"] });
 
                 }
-                else if (order["RESULT"].ToString() == "False" && order["Status"].ToString() == "400")
+                else if (orderJToken["RESULT"].ToString() == "False" && orderJToken["Status"].ToString() == "400")
                 {
-                    return BadRequest(new { error = order["Reason"] });
-
+                    CreateOrder order = orders.Peek();
+                    order.type = "Orden en "+order.currency+" No se pudo crear: " + orderJToken["Reason"].ToString();
+                    orders.Enqueue(order);
+                    orders.Dequeue();
                 }
+                else
+                {
+                    orders.Dequeue();
+                }
+                Iteracion++;
             }
-
+            if (orders.Count > 0)
+            {
+                return Ok(orders);
+            }
             return Ok();
-
+            //foreach(var order in ordersCreated)
+            //{
+            //    if (order["RESULT"].ToString() == "False" && order["Status"].ToString() == "409")
+            //    {
+            //        return Conflict(new { AUTH = order["Reason"] });
+            //
+            //    }
+            //    else if (order["RESULT"].ToString() == "False" && order["Status"].ToString() == "400")
+            //    {
+            //        return BadRequest(new { error = order["Reason"] });
+            //
+            //    }
+            //}
         }
-
+        
         public JToken CreateOrderNew(CreateOrder value)
         {
             SAPContext context = HttpContext.RequestServices.GetService(typeof(SAPContext)) as SAPContext;
@@ -1443,6 +1484,7 @@ namespace SAP_API.Controllers {
         // POST: api/Order
         // Creacion de Orden
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post([FromBody] CreateOrder value) {
 
             //SAPMulti SAPMultiInstance = HttpContext.RequestServices.GetService(typeof(SAPMulti)) as SAPMulti;
@@ -1591,6 +1633,7 @@ namespace SAP_API.Controllers {
 
         // POST: api/Order
         // Creacion de Orden
+        [Authorize]
         [HttpPost("Retail")]
         public async Task<IActionResult> PostRetail([FromBody] CreateOrderRetail value) {
 

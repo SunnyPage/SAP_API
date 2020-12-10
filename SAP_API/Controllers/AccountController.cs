@@ -79,12 +79,29 @@ namespace SAP_API.Controllers {
 
             if (result.Succeeded) {
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == loginData.Email);
+                var AppLogin = new AppUserLogin
+                {
+                    active = appUser.Active,
+                    Email = appUser.Email,
+                    id = appUser.Id,
+                    SAPID = appUser.SAPID,
+                    Name = appUser.Name,
+                    User = appUser.UserName
+                };
                 var token = await GenerateJwtToken(loginData.Email, appUser);
-                return Ok(new { token });
+                return Ok(new { token,AppLogin});
             }
             return BadRequest("Error al Intentar Iniciar Sesion");
         }
-
+        public class AppUserLogin
+        {
+            public Boolean active { get; set; }
+            public string Email { get; set; }
+            public string id { get; set; }
+            public string Name { get; set; }
+            public string User { get; set; }
+            public int SAPID { get; set; }
+        }
         /// <summary>
         /// Register User.
         /// </summary>

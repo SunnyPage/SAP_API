@@ -44,6 +44,7 @@ namespace SAP_API.Controllers {
         /// <response code="200">PriceList</response>
         // GET: api/PriceList
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Get() {
 
@@ -77,6 +78,7 @@ namespace SAP_API.Controllers {
         /// <returns>PriceList</returns>
         /// <response code="200">PriceList</response>
         // GET: api/PriceList/CRMList
+        [Authorize]
         [ProducesResponseType(typeof(PriceListOutput[]), StatusCodes.Status200OK)]
         [HttpGet("CRMList")]
         public async Task<IActionResult> GetCRMList() {

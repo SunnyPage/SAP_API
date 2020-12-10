@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -19,6 +20,7 @@ namespace SAP_API.Controllers {
         /// <returns>ClientSearchResponse</returns>
         /// <response code="200">ClientSearchResponse(SearchResponse)</response>
         // POST: api/Contact/Clients/Search
+        [Authorize]
         [ProducesResponseType(typeof(ClientSearchResponse), StatusCodes.Status200OK)]
         [HttpPost("Clients/Search")]
         public async Task<IActionResult> GetClients([FromBody] SearchRequest request) {
@@ -96,6 +98,7 @@ namespace SAP_API.Controllers {
         /// <returns>ProviderSearchResponse</returns>
         /// <response code="200">ProviderSearchResponse(SearchResponse)</response>
         // POST: api/Contact/Providers/Search
+        [Authorize]
         [ProducesResponseType(typeof(ProviderSearchResponse), StatusCodes.Status200OK)]
         [HttpPost("Providers/Search")]
         public async Task<IActionResult> GetProviders([FromBody] SearchRequest request) {
@@ -178,6 +181,7 @@ namespace SAP_API.Controllers {
         // GET: api/Contact/CRMClientToSell/:CardCode
         [ProducesResponseType(typeof(ContactToSell), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize]
         [HttpGet("CRMClientToSell/{CardCode}")]
         public async Task<IActionResult> GetCRMClientToSell(string CardCode) {
 
@@ -240,6 +244,7 @@ namespace SAP_API.Controllers {
         // GET: api/Contact/CRMProviderToBuy/:CardCode
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize]
         [HttpGet("CRMProviderToBuy/{CardCode}")]
         public async Task<IActionResult> GetCRMProviderToBuy(string CardCode) {
 
@@ -271,6 +276,7 @@ namespace SAP_API.Controllers {
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         [HttpGet("CRM/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetCRMID(string id) {
 
             SAPContext context = HttpContext.RequestServices.GetService(typeof(SAPContext)) as SAPContext;
@@ -351,8 +357,8 @@ namespace SAP_API.Controllers {
                     ""Country"",
                     ""Block"",
                     ""GroupNum"",
-                    ""ListNum"",
-                    ""salesPrson""
+                    ""ListNum""
+                    
                 From OCRD Where ""CardType"" = 'C' AND ""CardCode"" NOT LIKE '%-D' LIMIT 1");
             
             JToken contacts = context.XMLTOJSON(oRecSet.GetAsXML())["OCRD"];

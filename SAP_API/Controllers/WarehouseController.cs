@@ -197,6 +197,7 @@ namespace SAP_API.Controllers {
 
         // Lista de Sucursales con la serie para generar una orden de venta Mayoreo
         // GET: api/Warehouse/ListToSell
+        [Authorize]
         [HttpGet("ListToSell")]
         public async Task<IActionResult> GetListToSell() {
 
@@ -221,6 +222,7 @@ namespace SAP_API.Controllers {
 
         // Lista de Sucursales con la serie para generar una orden de venta Menudeo
         // GET: api/Warehouse/ListToSellRetail
+        [Authorize]
         [HttpGet("ListToSellRetail")]
         public async Task<IActionResult> GetListToSellRetail() {
 
@@ -266,6 +268,7 @@ namespace SAP_API.Controllers {
 
         // Sucursales y serie del documento orden de venta
         // GET: api/Warehouse/orderlist
+        [Authorize]
         [HttpGet("list")]
         public async Task<IActionResult> GetList() {
             
@@ -320,6 +323,7 @@ namespace SAP_API.Controllers {
         }
 
         // GET: api/Warehouse/porderlist
+        [Authorize]
         [HttpGet("purchaseorderlist")]
         public async Task<IActionResult> GetPList() {
             

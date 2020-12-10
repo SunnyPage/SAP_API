@@ -25,7 +25,7 @@ namespace SAP_API.Controllers
             }
             return NotFound("No Existe Producto");
         }
-
+        [Authorize]
         [HttpPost("Search/ToSell")]
         public async Task<IActionResult> GetSearchToSell([FromBody] SearchRequest request) {
 
@@ -93,7 +93,7 @@ namespace SAP_API.Controllers
             GC.WaitForPendingFinalizers();
             return Ok(respose);
         }
-
+        [Authorize]
         [HttpPost("Search/ToSellWithStock/{warehouse}")]
         public async Task<IActionResult> GetSearchToSellWithStock(string warehouse, [FromBody] SearchRequest request) {
 
@@ -171,7 +171,7 @@ namespace SAP_API.Controllers
             GC.WaitForPendingFinalizers();
             return Ok(respose);
         }
-
+        [Authorize]
         [HttpPost("Search/ToSellWithStockRetail/{warehouse}")]
         public async Task<IActionResult> GetSearchToSellWithStockRetail(string warehouse, [FromBody] SearchRequest request) {
 
@@ -254,6 +254,7 @@ namespace SAP_API.Controllers
         }
 
         // GET: api/Products/ProvidersProducts
+        [Authorize]
         [HttpPost("Search/ToBuy")]
         public async Task<IActionResult> GetSearchToBuy([FromBody] SearchRequest request) {
 
@@ -398,7 +399,7 @@ namespace SAP_API.Controllers
             GC.WaitForPendingFinalizers();
             return Ok(respose);
         }
-
+        [Authorize]
         [HttpPost("search/PriceList/{priceList}/{group}")]
         public async Task<IActionResult> GetSearchPriceList(string priceList, int group, [FromBody] SearchRequest request) {
         
@@ -597,6 +598,7 @@ namespace SAP_API.Controllers
 
 
         // GET: api/Products/CRMToSell/5
+        [Authorize]
         [HttpGet("CRMToSell/{id}/{priceList}/{warehouse}")]
         public async Task<IActionResult> GetCRMToSell(string id, int priceList, string warehouse) {
 
@@ -657,6 +659,7 @@ namespace SAP_API.Controllers
         }
 
         // GET: api/Products/Properties
+        [Authorize]
         [HttpGet("Properties")]
         public async Task<IActionResult> GetProperties() {
 
@@ -672,7 +675,7 @@ namespace SAP_API.Controllers
         }
 
         /// //////////////////////////////////////////
-
+        [Authorize]
         // GET: api/Products/CRMToSellEdit/5
         [HttpGet("CRMToSellEdit/{id}")]
         public async Task<IActionResult> GetCRMToSellEdit(string id) {
@@ -872,6 +875,7 @@ namespace SAP_API.Controllers
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // GET: api/Products/CRMToBuy/5
+        [Authorize]
         [HttpGet("CRMToBuy/{id}")]
         public async Task<IActionResult> GetCRMToBuy(string id) {
 
@@ -1161,6 +1165,7 @@ namespace SAP_API.Controllers
             return Ok(stock);
         }
 
+        [Authorize]
         // GET: api/Products/APPCRM
         [HttpGet("APPCRM")]
         public async Task<IActionResult> GetCRMS() {
@@ -1222,7 +1227,10 @@ namespace SAP_API.Controllers
                 JOIN OUOM UOM ON detail.""UomEntry"" = UOM.""UomEntry""
                 Where header.""UgpCode"" in (Select ""ItemCode"" From OITM Where ""SellItem"" = 'Y' AND ""QryGroup3"" = 'Y' AND ""Canceled"" = 'N'  AND ""validFor"" = 'Y')");
             oRecSet.MoveFirst();
+            
             JToken uom = context.XMLTOJSON(oRecSet.GetAsXML())["OUGP"];
+            
+                
             var returnValue = new { products, priceList, stock, uom };
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -1397,6 +1405,7 @@ namespace SAP_API.Controllers
         //}
 
         // GET: api/Products/CRM/5
+        [Authorize]
         [HttpGet("CRM/{id}")]
         public async Task<IActionResult> GetCRM(string id) {
 

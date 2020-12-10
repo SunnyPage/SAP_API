@@ -78,8 +78,7 @@ namespace SAP_API.Controllers
             OrderDetail orderDetail;
             JToken order;
             string DocCur;
-
-            oRecSet.DoQuery(@"
+                        oRecSet.DoQuery(@"
                 SELECT
                     ord.""DocEntry"",
                     ord.""DocNum"",
@@ -129,24 +128,27 @@ namespace SAP_API.Controllers
 
             oRecSet.DoQuery(@"
                 Select
-                    ""ItemCode"",
-                    ""Dscription"",
-                    ""Price"",
-                    ""Currency"",
+                    orderrow.""ItemCode"",
+                    orderrow.""Dscription"",
+                    orderrow.""Price"",
+                    orderrow.""Currency"",
+                    product.""U_IL_PesProm"" AS ""U_IL_PesProm"",
 
                     (case when ""U_CjsPsVr"" != '0' then ""U_CjsPsVr""
                     else ""Quantity"" end)  AS  ""Quantity"",
 
-                    (case when ""U_CjsPsVr"" != '0' then 'CAJA'
+                    (case when orderrow.""U_CjsPsVr"" != '0' then 'CAJA'
                     else ""UomCode"" end)  AS  ""UomCode"",
 
-                    ""InvQty"",
-                    ""UomCode2"",
+                    orderrow.""InvQty"",
+                    orderrow.""UomCode2"",
 
                     (case when '" + DocCur + @"' = 'USD' then ""TotalFrgn""
                     else ""LineTotal"" end)  AS  ""Total""
 
-                From RDR1 Where ""DocEntry"" = '" + DocEntry + "'");
+                From RDR1 orderrow
+                JOIN OITM product ON product.""ItemCode"" = orderrow.""ItemCode""
+                Where orderrow.""DocEntry"" = '" + DocEntry + "'");
             oRecSet.MoveFirst();
             order["OrderRows"] = context.XMLTOJSON(oRecSet.GetAsXML())["RDR1"];
 
@@ -434,7 +436,18 @@ namespace SAP_API.Controllers
                 row.Cells[3].AddParagraph(orderDetail.OrderRows[i].Quantity + " " + orderDetail.OrderRows[i].UomCode);
                 row.Cells[4].AddParagraph(orderDetail.OrderRows[i].InvQty + " " + orderDetail.OrderRows[i].UomCode2);
                 row.Cells[5].AddParagraph(orderDetail.OrderRows[i].Total + " " + orderDetail.DocCur);
-                boxes += orderDetail.OrderRows[i].Quantity;
+                if (!orderDetail.OrderRows[i].UomCode.Contains("CAJA"))
+                {
+                    if (double.Parse(orderDetail.OrderRows[i].U_IL_PesProm) != 0 && orderDetail.OrderRows[i].UomCode.Equals("KG"))
+                    {
+                        boxes += Math.Ceiling(orderDetail.OrderRows[i].Quantity / double.Parse(orderDetail.OrderRows[i].U_IL_PesProm));
+                    }
+                }
+                else
+                {
+                    boxes += orderDetail.OrderRows[i].Quantity;
+                }
+                
             }
 
             row = table.AddRow();

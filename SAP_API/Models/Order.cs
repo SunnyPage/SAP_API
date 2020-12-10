@@ -94,6 +94,8 @@ namespace SAP_API.Models {
         public double InvQty { get; set; }
         public string UomCode2 { get; set; }
         public double Total { get; set; }
+
+        public string U_IL_PesProm { get; set; }
     }
 
     public class CreateOrder {
@@ -107,6 +109,8 @@ namespace SAP_API.Models {
         public int auth { set; get; }
         public DateTime date { set; get; }
         public List<OrderRow> rows { set; get; }
+
+        public string type { get; set; }
     }
 
     public class CreateOrderRetail {
