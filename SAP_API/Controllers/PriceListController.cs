@@ -67,10 +67,7 @@ namespace SAP_API.Controllers {
         }
 
         // Class To Serialize Output
-        class PriceListOutput {
-            public string ListName { get; set; }
-            public uint ListNum { get; set; }
-        }
+        
 
         /// <summary>
         /// Get PriceList Name and Num.
@@ -91,6 +88,10 @@ namespace SAP_API.Controllers {
             List<PriceListOutput> output = temp.ToObject<List<PriceListOutput>>();
             return Ok(output);
         }
-
+        class PriceListOutput
+        {
+            public string ListName { get; set; }
+            public uint ListNum { get; set; }
+        }
     }
 }

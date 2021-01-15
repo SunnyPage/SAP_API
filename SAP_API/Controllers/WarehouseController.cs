@@ -172,11 +172,7 @@ namespace SAP_API.Controllers {
             return Ok();
         }
 
-        public class WarehouseWithSerie {
-            public string WhsName { get; set; }
-            public string WhsCode { get; set; }
-            public int Series { get; set; }
-        }
+       
 
         // Lista de Todas Las Sucursales
         // GET: api/Warehouse
@@ -401,6 +397,11 @@ namespace SAP_API.Controllers {
         //    JToken warehouseList = context.XMLTOJSON(oRecSet.GetAsXML())["NNM1"];
         //    return Ok(warehouseList);
         //}
-
+        public class WarehouseWithSerie
+        {
+            public string WhsName { get; set; }
+            public string WhsCode { get; set; }
+            public int Series { get; set; }
+        }
     }
 }

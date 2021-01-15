@@ -336,7 +336,7 @@ namespace SAP_API.Controllers
             paragraph = row.Cells[1].AddParagraph();
             paragraph.AddText("# pedido: " + orderDetail.DocNum);
             paragraph.AddLineBreak();
-            paragraph.AddText("Fecha de Creacion del Pedido: " + orderDetail.DocDate + " " + orderDetail.DocTime);
+            paragraph.AddText("Fecha de Creación del Pedido: " + orderDetail.DocDate + " " + orderDetail.DocTime);
             paragraph.AddLineBreak();
             paragraph.AddText("Fecha de Entrega Pedido: " + orderDetail.DocDueDate);
             paragraph.AddLineBreak();
@@ -379,9 +379,9 @@ namespace SAP_API.Controllers
             paragraph.AddLineBreak();
             paragraph.AddText("Nombre: " + orderDetail.CardFName);
             paragraph.AddLineBreak();
-            paragraph.AddText("Codigo: " + orderDetail.CardCode);
+            paragraph.AddText("Codigó: " + orderDetail.CardCode);
             paragraph.AddLineBreak();
-            paragraph.AddText("Direccion: " + orderDetail.Address2);
+            paragraph.AddText("Dirección: " + orderDetail.Address2);
             table.AddRow();
 
             table = section.AddTable();
@@ -404,6 +404,8 @@ namespace SAP_API.Controllers
             column.Format.Alignment = ParagraphAlignment.Left;
             column = table.AddColumn("3.16cm");
             column.Format.Alignment = ParagraphAlignment.Left;
+    //        column = table.AddColumn("2.62cm");
+      //      column.Format.Alignment = ParagraphAlignment.Left;
 
             row = table.AddRow();
             row.HeadingFormat = true;
@@ -419,8 +421,11 @@ namespace SAP_API.Controllers
             row.Cells[3].Format.Alignment = ParagraphAlignment.Left;
             row.Cells[4].AddParagraph("Qty SU");
             row.Cells[4].Format.Alignment = ParagraphAlignment.Left;
-            row.Cells[5].AddParagraph("Total");
+            row.Cells[5].AddParagraph("*Cantidad");
             row.Cells[5].Format.Alignment = ParagraphAlignment.Left;
+  //          row.Cells[6].AddParagraph("Total");
+//            row.Cells[6].Format.Alignment = ParagraphAlignment.Left;
+
             //table.SetEdge(0, 0, 6, 1, Edge.Box, BorderStyle.Single, 0.75, Color.Empty);
 
             double boxes = 0;
@@ -435,29 +440,38 @@ namespace SAP_API.Controllers
                 row.Cells[2].AddParagraph(orderDetail.OrderRows[i].Price + " " + orderDetail.OrderRows[i].Currency);
                 row.Cells[3].AddParagraph(orderDetail.OrderRows[i].Quantity + " " + orderDetail.OrderRows[i].UomCode);
                 row.Cells[4].AddParagraph(orderDetail.OrderRows[i].InvQty + " " + orderDetail.OrderRows[i].UomCode2);
-                row.Cells[5].AddParagraph(orderDetail.OrderRows[i].Total + " " + orderDetail.DocCur);
+                
+                //row.Cells[6].AddParagraph(orderDetail.OrderRows[i].Total + " " + orderDetail.DocCur);
                 if (!orderDetail.OrderRows[i].UomCode.Contains("CAJA"))
                 {
-                    if (double.Parse(orderDetail.OrderRows[i].U_IL_PesProm) != 0 && orderDetail.OrderRows[i].UomCode.Equals("KG"))
+                    double pesopromedio = double.Parse(orderDetail.OrderRows[i].U_IL_PesProm);
+                    if (pesopromedio != 0 && orderDetail.OrderRows[i].UomCode.Equals("KG"))
                     {
-                        boxes += Math.Ceiling(orderDetail.OrderRows[i].Quantity / double.Parse(orderDetail.OrderRows[i].U_IL_PesProm));
+                        boxes = Math.Ceiling(orderDetail.OrderRows[i].Quantity / pesopromedio);
+                        string cajas = boxes > 1 ? " CAJAS" : " CAJA";
+                        row.Cells[5].AddParagraph(boxes + cajas);
+                    }
+                    else
+                    {
+                        row.Cells[5].AddParagraph(orderDetail.OrderRows[i].Quantity+" " + orderDetail.OrderRows[i].UomCode);
                     }
                 }
                 else
                 {
-                    boxes += orderDetail.OrderRows[i].Quantity;
+                    string cajas= orderDetail.OrderRows[i].Quantity > 1 ? " CAJAS" : " CAJA";
+                    row.Cells[5].AddParagraph(orderDetail.OrderRows[i].Quantity + cajas);
                 }
                 
             }
 
-            row = table.AddRow();
-            row.Cells[0].Borders.Visible = false;
-            row.Cells[1].Borders.Visible = false;
-            row.Cells[2].Borders.Visible = false;
-            row.Cells[3].AddParagraph(boxes + " CAJAS");
-            row.Cells[3].Format.Alignment = ParagraphAlignment.Right;
-            row.Cells[4].Borders.Visible = false;
-            row.Cells[5].AddParagraph(orderDetail.Total + " " + orderDetail.DocCur);
+            //row = table.AddRow();
+            //row.Cells[0].Borders.Visible = false;
+            //row.Cells[1].Borders.Visible = false;
+            //row.Cells[2].Borders.Visible = false;
+            //row.Cells[3].AddParagraph(boxes + " CAJAS");
+            //row.Cells[3].Format.Alignment = ParagraphAlignment.Right;
+            //row.Cells[4].Borders.Visible = false;
+            //row.Cells[5].AddParagraph(orderDetail.Total + " " + orderDetail.DocCur);
 
             //table.SetEdge(5, table.Rows.Count - 4, 1, 4, Edge.Box, BorderStyle.Single, 1);
 
@@ -465,7 +479,9 @@ namespace SAP_API.Controllers
             paragraph.Format.SpaceBefore = "1cm";
             paragraph.AddText(@"Elaborado Por: " + orderDetail.SlpName);
             paragraph.AddLineBreak();
-            paragraph.AddText(@"Hora de Impresion: " + DateTime.Now.ToString("HH:mm"));
+            paragraph.AddText(@"Hora de Impresión: " + DateTime.Now.ToString("HH:mm"));
+            paragraph.AddLineBreak();
+            paragraph.AddFormattedText(@"*La cantidad de cajas es un aproximado en base al peso promedio por caja del producto", TextFormat.Bold);
 
             paragraph = new Paragraph();
             paragraph.AddText("Page ");
@@ -568,14 +584,7 @@ namespace SAP_API.Controllers
             RawPrinterHelper.SendBytesToPrinter("\\\\192.168.0.10\\" + IDPrinter, bytes, bytes.Length);
         }
 
-        public class CarnesPrint {
-            public string ItemCode { set; get; }
-            public string ItemName { set; get; }
-            public string Batch { set; get; }
-            public string ExpirationDate { set; get; }
-            public string Count { set; get; }
-            public string IDPrinter { set; get; }
-        }
+        
 
         // POST: api/Impresion/Carnes
         [HttpPost("Carnes")]
@@ -699,14 +708,7 @@ namespace SAP_API.Controllers
             RawPrinterHelper.SendBytesToPrinter("\\\\192.168.0.10\\" + value.IDPrinter, bytes, bytes.Length);
         }
 
-        public class MDomicilioPrint {
-            public string Room { set; get; }
-            public string Zone { set; get; }
-            public string Pasillo { set; get; }
-            public string Rack { set; get; }
-            public string IDPrinter { set; get; }
-        }
-
+        
         // POST: api/Impresion/MasterDomicilio
         [HttpPost("MasterDomicilio")]
         public void MasterDomicilio([FromBody] MDomicilioPrint value) {
@@ -753,15 +755,7 @@ namespace SAP_API.Controllers
             RawPrinterHelper.SendBytesToPrinter("\\\\192.168.0.10\\" + value.IDPrinter, bytes, bytes.Length);
         }
 
-        public class DomicilioPrint {
-            public string Room { set; get; }
-            public string Zone { set; get; }
-            public string Pasillo { set; get; }
-            public string Position { set; get; }
-            public string Section { set; get; }
-            public string Nivel { set; get; }
-            public string IDPrinter { set; get; }
-        }
+        
 
         // POST: api/Impresion/MasterDomicilio
         [HttpPost("Domicilio")]
@@ -808,5 +802,34 @@ namespace SAP_API.Controllers
             var bytes = Encoding.ASCII.GetBytes(s);
             RawPrinterHelper.SendBytesToPrinter("\\\\192.168.0.10\\" + value.IDPrinter, bytes, bytes.Length);
         }
+        public class CarnesPrint
+        {
+            public string ItemCode { set; get; }
+            public string ItemName { set; get; }
+            public string Batch { set; get; }
+            public string ExpirationDate { set; get; }
+            public string Count { set; get; }
+            public string IDPrinter { set; get; }
+        }
+        public class DomicilioPrint
+        {
+            public string Room { set; get; }
+            public string Zone { set; get; }
+            public string Pasillo { set; get; }
+            public string Position { set; get; }
+            public string Section { set; get; }
+            public string Nivel { set; get; }
+            public string IDPrinter { set; get; }
+        }
+        public class MDomicilioPrint
+        {
+            public string Room { set; get; }
+            public string Zone { set; get; }
+            public string Pasillo { set; get; }
+            public string Rack { set; get; }
+            public string IDPrinter { set; get; }
+        }
     }
+    
+
 }

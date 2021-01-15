@@ -34,14 +34,7 @@ namespace SAP_API.Controllers {
             _roleManager = roleManager;
         }
 
-        class UserOutput {
-            public string Id { get; set; }
-            public string LastName { get; set; }
-            public string Name { get; set; }
-            public string Email { get; set; }
-            public string Department { get; set; }
-            public string Warehouse { get; set; }
-        }
+       
         /// <summary>
         /// Get User List From External Database.
         /// </summary>
@@ -64,19 +57,7 @@ namespace SAP_API.Controllers {
             return Ok(output);
         }
 
-        class UserDetailOutput {
-            public string Id { get; set; }
-            public string Email { get; set; }
-            public string Name { get; set; }
-            public string LastName { get; set; }
-            public bool Active { get; set; }
-            public int SAPID { get; set; }
-            public string Department { get; set; }
-            public string Warehouse { get; set; }
-            public string Role { get; set; }
-            public List<PermissionsOutput> RolePermissions { get; set; }
-            public List<PermissionsOutput> PermissionsExtra { get; set; }
-        }
+        
         // TODO: Change Department and Warehouse "Get"
         /// <summary>
         /// Get User Detail From External Database.
@@ -225,6 +206,29 @@ namespace SAP_API.Controllers {
             }
             return BadRequest(stringBuilder.ToString());
 
+        }
+        class UserOutput
+        {
+            public string Id { get; set; }
+            public string LastName { get; set; }
+            public string Name { get; set; }
+            public string Email { get; set; }
+            public string Department { get; set; }
+            public string Warehouse { get; set; }
+        }
+        class UserDetailOutput
+        {
+            public string Id { get; set; }
+            public string Email { get; set; }
+            public string Name { get; set; }
+            public string LastName { get; set; }
+            public bool Active { get; set; }
+            public int SAPID { get; set; }
+            public string Department { get; set; }
+            public string Warehouse { get; set; }
+            public string Role { get; set; }
+            public List<PermissionsOutput> RolePermissions { get; set; }
+            public List<PermissionsOutput> PermissionsExtra { get; set; }
         }
     }
 }

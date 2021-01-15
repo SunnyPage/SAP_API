@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Authorization;
 using SAP_API.Models;
 
 namespace SAP_API.Controllers {
+    
 
     [Route("api/[controller]")]
     [ApiController]
+    
     public class CodeBarController : ControllerBase {
 
         // Note: Documentation No Complete.
@@ -90,13 +92,6 @@ namespace SAP_API.Controllers {
 
             return Ok(new { Detail, CodeBars, uom });
         }
-
-        public class Codebar {
-            public string ItemCode { set; get; }
-            public string Barcode { set; get; }
-            public int UOMEntry { set; get; }
-        }
-
         /// <summary>
         /// Register Item CodeBar
         /// </summary>
@@ -143,6 +138,12 @@ namespace SAP_API.Controllers {
             }
             
         }
-
+        public class Codebar
+        {
+            public string ItemCode { set; get; }
+            public string Barcode { set; get; }
+            public int UOMEntry { set; get; }
+        }
     }
+    
 }

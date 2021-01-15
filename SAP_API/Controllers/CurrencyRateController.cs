@@ -7,15 +7,13 @@ using Newtonsoft.Json.Linq;
 using SAP_API.Models;
 
 namespace SAP_API.Controllers {
-
+    
     [Route("api/[controller]")]
     [ApiController]
     public class CurrencyRateController : ControllerBase {
 
         // Class To Serialize CurrencyRate Query Result 
-        public class CurrencyRateDetail {
-            public double CurrencyRate;
-        }
+        
 
         /// <summary>
         /// Get CurrencyRate From the Current Date.
@@ -43,6 +41,10 @@ namespace SAP_API.Controllers {
                 return Conflict(ex.Message);
             }
         }
-
+        public class CurrencyRateDetail
+        {
+            public double CurrencyRate;
+        }
     }
+   
 }

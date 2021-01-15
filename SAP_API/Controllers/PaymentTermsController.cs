@@ -13,10 +13,7 @@ namespace SAP_API.Controllers
     [ApiController]
     public class PaymentTermsController : ControllerBase {
 
-        public class PaymentTermDetail {
-            public string PymntGroup { get; set; }
-            public int GroupNum { get; set; }
-        }
+        
 
         // GET: api/PaymentTerms
         [HttpGet]
@@ -95,5 +92,10 @@ namespace SAP_API.Controllers
         //public void Delete(int id)
         //{
         //}
+        public class PaymentTermDetail
+        {
+            public string PymntGroup { get; set; }
+            public int GroupNum { get; set; }
+        }
     }
 }

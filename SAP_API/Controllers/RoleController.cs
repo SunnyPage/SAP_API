@@ -40,11 +40,7 @@ namespace SAP_API.Controllers {
             return Ok(_context.Roles);
         }
 
-        class RoleOutput {
-            public string Name { get; set; }
-            public string ID { get; set; }
-            public List<Permission.PermissionsOutput> PermissionsList { get; set; }
-        }
+      
 
         /// <summary>
         /// Get Role Detail From External Database.
@@ -135,6 +131,11 @@ namespace SAP_API.Controllers {
 
             return Ok();
         }
-
+        class RoleOutput
+        {
+            public string Name { get; set; }
+            public string ID { get; set; }
+            public List<Permission.PermissionsOutput> PermissionsList { get; set; }
+        }
     }
 }

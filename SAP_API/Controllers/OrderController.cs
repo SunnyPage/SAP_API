@@ -539,46 +539,7 @@ namespace SAP_API.Controllers {
             return Ok(new { CountAll, CountToday });
         }
 
-        class OrderDeliveryOutputLineUom {
-            public uint BaseEntry { get; set; }
-            public string BaseUom { get; set; }
-            public uint UomEntry { get; set; }
-            public string UomCode { get; set; }
-            public double BaseQty { get; set; }
-        }
-        class OrderDeliveryOutputLine {
-            public string LineStatus { get; set; }
-            public uint LineNum { get; set; }
-            public string ItemCode { get; set; }
-            public uint UomEntry { get; set; }
-            public string WhsCode { get; set; }
-            public string UomCode { get; set; }
-            public double OpenInvQty { get; set; }
-            public double OpenQty { get; set; }
-
-            public string ItemName { get; set; }
-            public char QryGroup42 { get; set; }
-            public char QryGroup44 { get; set; }
-            public char QryGroup45 { get; set; }
-            public char ManBtchNum { get; set; }
-            public double U_IL_PesMax { get; set; }
-            public double U_IL_PesMin { get; set; }
-            public double U_IL_PesProm { get; set; }
-            public string U_IL_TipPes { get; set; }
-            public double NumInSale { get; set; }
-            public double NumInBuy { get; set; }
-            public List<string> CodeBars { get; set; }
-            public List<OrderDeliveryOutputLineUom> Uoms { get; set; }
-        }
-        class OrderDeliveryOutput {
-            public uint DocEntry { get; set; }
-            public uint DocNum { get; set; }
-            [Required]
-            public string DocStatus { get; set; }
-            public string CardName { get; set; }
-            public string CardCode { get; set; }
-            public List<OrderDeliveryOutputLine> Lines { get; set; }
-        }
+        
 
         /// <summary>
         /// Get Order Detail to WMS App Delivery. This route return header and lines
@@ -1135,6 +1096,7 @@ namespace SAP_API.Controllers {
         public IActionResult OrderSeparation([FromBody] CreateOrder value)
         {
            // List<JToken> ordersCreated = new List<JToken>();
+           //Queue para el manejo de las ordenes de compra
             Queue<CreateOrder> orders = new Queue<CreateOrder>();
             // Only in CEDIS
             var productsMeatMXN = new List<OrderRow>();
@@ -1787,6 +1749,47 @@ namespace SAP_API.Controllers {
 
             return BadRequest(new { error = "No Existe Documento" });
         }
-
+        class OrderDeliveryOutputLineUom
+        {
+            public uint BaseEntry { get; set; }
+            public string BaseUom { get; set; }
+            public uint UomEntry { get; set; }
+            public string UomCode { get; set; }
+            public double BaseQty { get; set; }
+        }
+        class OrderDeliveryOutputLine
+        {
+            public string LineStatus { get; set; }
+            public uint LineNum { get; set; }
+            public string ItemCode { get; set; }
+            public uint UomEntry { get; set; }
+            public string WhsCode { get; set; }
+            public string UomCode { get; set; }
+            public double OpenInvQty { get; set; }
+            public double OpenQty { get; set; }
+            public string ItemName { get; set; }
+            public char QryGroup42 { get; set; }
+            public char QryGroup44 { get; set; }
+            public char QryGroup45 { get; set; }
+            public char ManBtchNum { get; set; }
+            public double U_IL_PesMax { get; set; }
+            public double U_IL_PesMin { get; set; }
+            public double U_IL_PesProm { get; set; }
+            public string U_IL_TipPes { get; set; }
+            public double NumInSale { get; set; }
+            public double NumInBuy { get; set; }
+            public List<string> CodeBars { get; set; }
+            public List<OrderDeliveryOutputLineUom> Uoms { get; set; }
+        }
+        class OrderDeliveryOutput
+        {
+            public uint DocEntry { get; set; }
+            public uint DocNum { get; set; }
+            [Required]
+            public string DocStatus { get; set; }
+            public string CardName { get; set; }
+            public string CardCode { get; set; }
+            public List<OrderDeliveryOutputLine> Lines { get; set; }
+        }
     }
 }

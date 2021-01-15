@@ -4,15 +4,7 @@ using System.Text;
 
 namespace SAP_API.Controllers
 {
-    public class PrintS {
-        public string gti { set; get; }
-        public string peso { set; get; }
-        public string lote { set; get; }
-        public string ItemName { set; get; }
-        public string ItemCode { set; get; }
-        public string Fecha { set; get; }
-
-    }
+  
 
     [Route("api/[controller]")]
     [ApiController]
@@ -73,6 +65,15 @@ namespace SAP_API.Controllers
             //MessageBox.Show("Data sent to printer.");
             //}
         }
+        public class PrintS
+        {
+            public string gti { set; get; }
+            public string peso { set; get; }
+            public string lote { set; get; }
+            public string ItemName { set; get; }
+            public string ItemCode { set; get; }
+            public string Fecha { set; get; }
 
+        }
     }
 }

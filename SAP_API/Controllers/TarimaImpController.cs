@@ -9,13 +9,7 @@ namespace SAP_API.Controllers
     [ApiController]
     public class TarimaImpController : ControllerBase {
 
-        public class TarimaPrintTransfer {
-            public string WHS { set; get; }
-            public string Pallet { set; get; }
-            public string Request { set; get; }
-            public string Transfer { set; get; }
-            public string RequestCopy { set; get; }
-        } 
+      
 
         // POST: api/TarimaImp
         [HttpPost]
@@ -61,6 +55,13 @@ namespace SAP_API.Controllers
             //MessageBox.Show("Data sent to printer.");
             //}
         }
-
+        public class TarimaPrintTransfer
+        {
+            public string WHS { set; get; }
+            public string Pallet { set; get; }
+            public string Request { set; get; }
+            public string Transfer { set; get; }
+            public string RequestCopy { set; get; }
+        }
     }
 }

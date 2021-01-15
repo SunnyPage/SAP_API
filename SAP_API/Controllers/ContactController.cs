@@ -366,7 +366,14 @@ namespace SAP_API.Controllers {
             GC.WaitForPendingFinalizers();
             return Ok(contacts);
         }
-
+        /// <summary>
+        /// Devuelve la informacion del cliente con el CardCode
+        /// </summary>
+        /// <param name="CardCode">Codigo del cliente</param>
+        /// <returns>
+        /// Si existe el cliente, regresa la informacion del cliente
+        /// Si no existe el cliente regresa un NoContent
+        /// </returns>
         [HttpGet("{CardCode}")]
         public async Task<IActionResult> Get(string CardCode) {
 

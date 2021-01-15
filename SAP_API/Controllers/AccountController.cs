@@ -17,6 +17,7 @@ using SAP_API.Entities;
 using SAP_API.Models;
 
 namespace SAP_API.Controllers {
+    
 
     [Route("api/[controller]")]
     [ApiController]
@@ -59,10 +60,6 @@ namespace SAP_API.Controllers {
             string UserID = ClaimUserID.Value;
             return Redirect($"/api/User/{UserID}");
         }
-
-        class Token {
-            public string token { get; set; }
-        }
         /// <summary>
         /// Try to Login. Generate a Token.
         /// </summary>
@@ -93,15 +90,7 @@ namespace SAP_API.Controllers {
             }
             return BadRequest("Error al Intentar Iniciar Sesion");
         }
-        public class AppUserLogin
-        {
-            public Boolean active { get; set; }
-            public string Email { get; set; }
-            public string id { get; set; }
-            public string Name { get; set; }
-            public string User { get; set; }
-            public int SAPID { get; set; }
-        }
+        
         /// <summary>
         /// Register User.
         /// </summary>
@@ -199,8 +188,21 @@ namespace SAP_API.Controllers {
             var securityToken = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(securityToken);
         }
-
-        public class LoginDto {
+        class Token
+        {
+            public string token { get; set; }
+        }
+        public class AppUserLogin
+        {
+            public Boolean active { get; set; }
+            public string Email { get; set; }
+            public string id { get; set; }
+            public string Name { get; set; }
+            public string User { get; set; }
+            public int SAPID { get; set; }
+        }
+        public class LoginDto
+        {
             [Required]
             public string Email { get; set; }
 
@@ -209,7 +211,8 @@ namespace SAP_API.Controllers {
 
         }
 
-        public class RegisterDto {
+        public class RegisterDto
+        {
             [Required]
             public string Email { get; set; }
 
@@ -227,7 +230,8 @@ namespace SAP_API.Controllers {
             public int SAPID { get; set; }
         }
 
-        public class EditDto {
+        public class EditDto
+        {
             [Required]
             public string Email { get; set; }
 
@@ -243,6 +247,5 @@ namespace SAP_API.Controllers {
             public int Warehouse { get; set; }
             public int SAPID { get; set; }
         }
-
     }
 }

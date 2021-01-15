@@ -270,44 +270,7 @@ namespace SAP_API.Controllers
             return Ok(transfer);
         }
 
-        class TransferDeliveryOutputLineUom {
-            public uint BaseEntry { get; set; }
-            public string BaseUom { get; set; }
-            public uint UomEntry { get; set; }
-            public string UomCode { get; set; }
-            public double BaseQty { get; set; }
-        }
-        class TransferDeliveryOutputLine {
-            public string LineStatus { get; set; }
-            public uint LineNum { get; set; }
-            public string ItemCode { get; set; }
-            public uint UomEntry { get; set; }
-            public string WhsCode { get; set; }
-            public string UomCode { get; set; }
-            public double OpenInvQty { get; set; }
-            public double OpenQty { get; set; }
-            public string FromWhsCod { get; set; }
-            public string ItemName { get; set; }
-            public char QryGroup44 { get; set; }
-            public char QryGroup45 { get; set; }
-            public char ManBtchNum { get; set; }
-            public double U_IL_PesMax { get; set; }
-            public double U_IL_PesMin { get; set; }
-            public double U_IL_PesProm { get; set; }
-            public string U_IL_TipPes { get; set; }
-            public double NumInSale { get; set; }
-            public double NumInBuy { get; set; }
-            public List<string> CodeBars { get; set; }
-            public List<TransferDeliveryOutputLineUom> Uoms { get; set; }
-        }
-        class TransferDeliveryOutput {
-            public uint DocEntry { get; set; }
-            public uint DocNum { get; set; }
-            public string DocStatus { get; set; }
-            public string ToWhsCode { get; set; }
-            public string Filler { get; set; }
-            public List<TransferDeliveryOutputLine> Lines { get; set; }
-        }
+        
 
         /// <summary>
         /// Get TransferRequest Detail to WMS App Delivery. This route return header and lines
@@ -902,6 +865,47 @@ namespace SAP_API.Controllers
 
             return BadRequest(new { error = "No Existe Documento" });
         }
-
+        class TransferDeliveryOutputLineUom
+        {
+            public uint BaseEntry { get; set; }
+            public string BaseUom { get; set; }
+            public uint UomEntry { get; set; }
+            public string UomCode { get; set; }
+            public double BaseQty { get; set; }
+        }
+        class TransferDeliveryOutputLine
+        {
+            public string LineStatus { get; set; }
+            public uint LineNum { get; set; }
+            public string ItemCode { get; set; }
+            public uint UomEntry { get; set; }
+            public string WhsCode { get; set; }
+            public string UomCode { get; set; }
+            public double OpenInvQty { get; set; }
+            public double OpenQty { get; set; }
+            public string FromWhsCod { get; set; }
+            public string ItemName { get; set; }
+            public char QryGroup44 { get; set; }
+            public char QryGroup45 { get; set; }
+            public char ManBtchNum { get; set; }
+            public double U_IL_PesMax { get; set; }
+            public double U_IL_PesMin { get; set; }
+            public double U_IL_PesProm { get; set; }
+            public string U_IL_TipPes { get; set; }
+            public double NumInSale { get; set; }
+            public double NumInBuy { get; set; }
+            public List<string> CodeBars { get; set; }
+            public List<TransferDeliveryOutputLineUom> Uoms { get; set; }
+        }
+        class TransferDeliveryOutput
+        {
+            public uint DocEntry { get; set; }
+            public uint DocNum { get; set; }
+            public string DocStatus { get; set; }
+            public string ToWhsCode { get; set; }
+            public string Filler { get; set; }
+            public List<TransferDeliveryOutputLine> Lines { get; set; }
+        }
     }
+    
 }
