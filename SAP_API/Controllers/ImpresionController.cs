@@ -21,12 +21,14 @@ namespace SAP_API.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-    public class ImpresionController : ControllerBase {
+    public class ImpresionController : ControllerBase
+    {
 
         // GET: api/Impresion/
         [HttpGet("Impresoras")]
         [Authorize]
-        public async Task<IActionResult> GetImpresoras() {
+        public async Task<IActionResult> GetImpresoras()
+        {
 
             SAPContext context = HttpContext.RequestServices.GetService(typeof(SAPContext)) as SAPContext;
             SAPbobsCOM.Recordset oRecSet = (SAPbobsCOM.Recordset)context.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
@@ -38,7 +40,8 @@ namespace SAP_API.Controllers
         // GET: api/Impresion/
         // TODO: Authorization CRM
         [HttpGet("Order/{DocEntries}")]
-        public async Task<FileContentResult> GetOrder(string DocEntries) {
+        public async Task<FileContentResult> GetOrder(string DocEntries)
+        {
 
             SAPContext context = HttpContext.RequestServices.GetService(typeof(SAPContext)) as SAPContext;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -47,15 +50,18 @@ namespace SAP_API.Controllers
             PdfDocument outputDocument = new PdfDocument();
             outputDocument.Info.Title = "";
 
-            for (int i = 0; i < DocEntryList.Length; i++) {
+            for (int i = 0; i < DocEntryList.Length; i++)
+            {
                 pdfList.Add(GetOrderPDFDocument(Int32.Parse(DocEntryList[i])));
             }
 
-            for (int i = 0; i < pdfList.Count; i++){
+            for (int i = 0; i < pdfList.Count; i++)
+            {
                 PdfDocument inputDocument = PdfReader.Open(pdfList[i], PdfDocumentOpenMode.Import);
 
                 int count = inputDocument.PageCount;
-                for (int idx = 0; idx < count; idx++) {
+                for (int idx = 0; idx < count; idx++)
+                {
                     PdfPage page = inputDocument.Pages[idx];
                     outputDocument.AddPage(page);
                 }
@@ -71,14 +77,15 @@ namespace SAP_API.Controllers
             return File(bytes, "application/pdf");
         }
 
-        private MemoryStream GetOrderPDFDocument(int DocEntry) {
+        private MemoryStream GetOrderPDFDocument(int DocEntry)
+        {
 
             SAPContext context = HttpContext.RequestServices.GetService(typeof(SAPContext)) as SAPContext;
             SAPbobsCOM.Recordset oRecSet = (SAPbobsCOM.Recordset)context.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             OrderDetail orderDetail;
             JToken order;
             string DocCur;
-                        oRecSet.DoQuery(@"
+            oRecSet.DoQuery(@"
                 SELECT
                     ord.""DocEntry"",
                     ord.""DocNum"",
@@ -370,7 +377,8 @@ namespace SAP_API.Controllers
             paragraph.AddText("Observaciones:");
             paragraph.AddLineBreak();
 
-            if (orderDetail.Comments != null) {
+            if (orderDetail.Comments != null)
+            {
                 paragraph.AddText(orderDetail.Comments);
             }
 
@@ -447,7 +455,7 @@ namespace SAP_API.Controllers
                 {
                     boxes += orderDetail.OrderRows[i].Quantity;
                 }
-                
+
             }
 
             row = table.AddRow();
@@ -506,11 +514,13 @@ namespace SAP_API.Controllers
 
         // POST: api/TarimaImp
         [HttpPost("Tarima")]
-        public void Post([FromBody] TarimaPrint value) {
+        public void Post([FromBody] TarimaPrint value)
+        {
             etiquetaproduccion(value.IDPrinter, value.WHS, value.Pallet, value.Request, value.Transfer, value.RequestCopy, DateTime.Now.ToString());
         }
 
-        private void etiquetaproduccion(string IDPrinter, string WHS, string NumeroTarima, string SolicitudTraslado, string Transferencia, string Recepcion, string Fecha) {
+        private void etiquetaproduccion(string IDPrinter, string WHS, string NumeroTarima, string SolicitudTraslado, string Transferencia, string Recepcion, string Fecha)
+        {
 
             //string s = "^XA\n";
             //s += "^FW\n";
@@ -568,11 +578,12 @@ namespace SAP_API.Controllers
             RawPrinterHelper.SendBytesToPrinter("\\\\192.168.0.10\\" + IDPrinter, bytes, bytes.Length);
         }
 
-    
+
         // POST: api/Impresion/Carnes
         [HttpPost("Carnes")]
         [Authorize]
-        public void Carnes([FromBody] CarnesPrint value) {
+        public void Carnes([FromBody] CarnesPrint value)
+        {
 
             string txtProducto = value.ItemCode;
             string txtDescripcion = value.ItemName;
@@ -630,8 +641,9 @@ namespace SAP_API.Controllers
 
         // POST: api/Impresion/Consumo
         [HttpPost("Consumo")]
-        public void Consumo([FromBody] CarnesPrint value) {
-            
+        public void Consumo([FromBody] CarnesPrint value)
+        {
+
             string txtProducto = value.ItemCode;
             string txtDescripcion = value.ItemName;
             string txtLote = value.Batch;
@@ -693,7 +705,8 @@ namespace SAP_API.Controllers
 
         // POST: api/Impresion/MasterDomicilio
         [HttpPost("MasterDomicilio")]
-        public void MasterDomicilio([FromBody] MDomicilioPrint value) {
+        public void MasterDomicilio([FromBody] MDomicilioPrint value)
+        {
 
             string txtCuarto = value.Room;
             string txtZona = value.Zone;
@@ -738,7 +751,8 @@ namespace SAP_API.Controllers
         }
         // POST: api/Impresion/MasterDomicilio
         [HttpPost("Domicilio")]
-        public void Domicilio([FromBody] DomicilioPrint value) {
+        public void Domicilio([FromBody] DomicilioPrint value)
+        {
 
             string txtCuarto = value.Room;
             string txtZona = value.Zone;
