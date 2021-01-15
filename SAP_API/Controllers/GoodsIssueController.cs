@@ -122,7 +122,6 @@ namespace SAP_API.Controllers {
             return Ok(respose);
         }
 
-        // Class To Serialize GoodsIssue Query Result 
         
         /// <summary>
         /// Get GoodsIssue Detail to WMS GoodsIssue Detail Page
@@ -181,16 +180,6 @@ namespace SAP_API.Controllers {
 
             return Ok(output);
         }
-        class GoodsIssueDetailLine
-        {
-            public string ItemCode { set; get; }
-            public string Dscription { set; get; }
-            public double Quantity { set; get; }
-            public string UomCode { set; get; }
-            public string UomCode2 { set; get; }
-            public double InvQty { set; get; }
-        }
-
         // Class To Serialize GoodsIssue Query Result
         class GoodsIssueDetail
         {
@@ -201,7 +190,15 @@ namespace SAP_API.Controllers {
             public string WhsName { set; get; }
             public List<GoodsIssueDetailLine> Lines { set; get; }
         };
+        // Class To Serialize GoodsIssue Query Result 
+        class GoodsIssueDetailLine
+        {
+            public string ItemCode { set; get; }
+            public string Dscription { set; get; }
+            public double Quantity { set; get; }
+            public string UomCode { set; get; }
+            public string UomCode2 { set; get; }
+            public double InvQty { set; get; }
+        };
     }
-    
-
 }

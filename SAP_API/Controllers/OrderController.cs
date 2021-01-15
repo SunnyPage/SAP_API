@@ -539,8 +539,7 @@ namespace SAP_API.Controllers {
             return Ok(new { CountAll, CountToday });
         }
 
-        
-
+ 
         /// <summary>
         /// Get Order Detail to WMS App Delivery. This route return header and lines
         /// document, plus BarCodes and Uoms Detail.
@@ -1096,7 +1095,6 @@ namespace SAP_API.Controllers {
         public IActionResult OrderSeparation([FromBody] CreateOrder value)
         {
            // List<JToken> ordersCreated = new List<JToken>();
-           //Queue para el manejo de las ordenes de compra
             Queue<CreateOrder> orders = new Queue<CreateOrder>();
             // Only in CEDIS
             var productsMeatMXN = new List<OrderRow>();
@@ -1767,6 +1765,7 @@ namespace SAP_API.Controllers {
             public string UomCode { get; set; }
             public double OpenInvQty { get; set; }
             public double OpenQty { get; set; }
+
             public string ItemName { get; set; }
             public char QryGroup42 { get; set; }
             public char QryGroup44 { get; set; }
@@ -1791,5 +1790,6 @@ namespace SAP_API.Controllers {
             public string CardCode { get; set; }
             public List<OrderDeliveryOutputLine> Lines { get; set; }
         }
+
     }
 }

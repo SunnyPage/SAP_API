@@ -270,8 +270,6 @@ namespace SAP_API.Controllers
             return Ok(transfer);
         }
 
-        
-
         /// <summary>
         /// Get TransferRequest Detail to WMS App Delivery. This route return header and lines
         /// document, plus BarCodes and Uoms Detail.
@@ -865,6 +863,7 @@ namespace SAP_API.Controllers
 
             return BadRequest(new { error = "No Existe Documento" });
         }
+
         class TransferDeliveryOutputLineUom
         {
             public uint BaseEntry { get; set; }
@@ -906,6 +905,6 @@ namespace SAP_API.Controllers
             public string Filler { get; set; }
             public List<TransferDeliveryOutputLine> Lines { get; set; }
         }
+
     }
-    
 }

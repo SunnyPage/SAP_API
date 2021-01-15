@@ -119,9 +119,7 @@ namespace SAP_API.Controllers {
                 recordsTotal = COUNT,
             };
             return Ok(respose);
-        }
-
-       
+        }     
         /// <summary>
         /// Get GoodsRecipt Detail to WMS GoodsRecipt Detail Page
         /// </summary>
@@ -186,16 +184,6 @@ namespace SAP_API.Controllers {
 
             return Ok(output);
         }
-        class GoodsReceiptDetailLine
-        {
-            public string ItemCode;
-            public string Dscription;
-            public double Quantity;
-            public string UomCode;
-            public string UomCode2;
-            public double InvQty;
-        }
-
         // Class To Serialize GoodsReceipt Query Result
         class GoodsReceiptDetail
         {
@@ -206,8 +194,16 @@ namespace SAP_API.Controllers {
             public string WhsName;
             public List<GoodsReceiptDetailLine> Lines;
         };
-    }
-    // Class To Serialize GoodsReceipt Query Result 
-   
+        // Class To Serialize GoodsReceipt Query Result 
+        class GoodsReceiptDetailLine
+        {
+            public string ItemCode;
+            public string Dscription;
+            public double Quantity;
+            public string UomCode;
+            public string UomCode2;
+            public double InvQty;
+        }
 
+    }
 }
