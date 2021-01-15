@@ -909,6 +909,34 @@ namespace SAP_API.Controllers {
             GC.WaitForPendingFinalizers();
             return Ok(orders);
         }
+        [HttpGet("CRMAPP/list/")]
+        public async Task<IActionResult> GetCRMAPPListNoEmployee(string id, int employee)
+        {
+
+            SAPContext context = HttpContext.RequestServices.GetService(typeof(SAPContext)) as SAPContext;
+            SAPbobsCOM.Recordset oRecSet = (SAPbobsCOM.Recordset)context.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            oRecSet.DoQuery(@"
+                 Select
+                    ord.""DocEntry"",
+                    ord.""DocNum"",
+                    ord.""DocDate"",
+                    ord.""DocStatus"",
+                    contact.""CardFName"",
+                    warehouse.""WhsName""
+                From ORDR ord
+                LEFT JOIN NNM1 serie ON ord.""Series"" = serie.""Series""
+                LEFT JOIN OWHS warehouse ON serie.""SeriesName"" = warehouse.""WhsCode""
+                LEFT JOIN OSLP person ON ord.""SlpCode"" = person.""SlpCode""
+                LEFT JOIN OCRD contact ON ord.""CardCode"" = contact.""CardCode""
+                Where ord.""DocStatus"" = 'O' AND ord.""DocDate"" >= add_days(CURRENT_DATE, -3) ");
+
+            oRecSet.MoveFirst();
+            JToken orders = context.XMLTOJSON(oRecSet.GetAsXML())["ORDR"];
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            return Ok(orders);
+        }
 
         // GET: api/Order/5
         // Orden Detalle

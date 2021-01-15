@@ -329,7 +329,8 @@ namespace SAP_API.Controllers {
             return Ok();
         }
 
-
+        //Ruta aun utilizada debido a la falta de actualizacion de handhelds.
+        //TODO: Esta ruta se depreciara cuando las handheld esten completamente actualizadas.
         // POST: api/Delivery
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] DeliveryOld value)
