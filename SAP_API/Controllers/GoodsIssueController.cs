@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using SAP_API.Models;
 
-namespace SAP_API.Controllers {
+namespace SAP_API.Controllers { 
 
     [Route("api/[controller]")]
     [ApiController]

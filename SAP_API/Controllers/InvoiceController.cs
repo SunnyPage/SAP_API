@@ -11,13 +11,13 @@ namespace SAP_API.Controllers
     [ApiController]
     public class InvoiceController : ControllerBase
     {
-
+        
         [Authorize]
         // GET api/<InvoiceController>/5
         [HttpGet("{DocEntry}")]
         public IActionResult GetInvoice(string DocEntry)
         {
-
+            
             SAPContext context = HttpContext.RequestServices.GetService(typeof(SAPContext)) as SAPContext;
             SAPbobsCOM.Recordset oRecSet = (SAPbobsCOM.Recordset)context.oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
             JToken invoice;
@@ -36,7 +36,7 @@ namespace SAP_API.Controllers
                     Invoice.""Series""
                     From OINV Invoice
                     JOIN OCRD Client ON Client.""CardCode""= Invoice.""CardCode""
-                    Where Invoice.""DocNum"" = '" + DocEntry + "'"+
+                    Where Invoice.""DocNum"" = '" + DocEntry + "'"+ 
                     @"and Invoice.""CANCELED""='N'" );
             if (oRecSet.RecordCount == 0)
             {
