@@ -359,7 +359,7 @@ namespace SAP_API.Controllers {
                     ""GroupNum"",
                     ""ListNum""
                     
-                From OCRD Where ""CardType"" = 'C' AND ""CardCode"" NOT LIKE '%-D' LIMIT 1");
+                From OCRD Where ""CardType"" = 'C' AND ""CardCode"" NOT LIKE '%-D'");
             
             JToken contacts = context.XMLTOJSON(oRecSet.GetAsXML())["OCRD"];
             GC.Collect();
