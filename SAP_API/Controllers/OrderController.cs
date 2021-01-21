@@ -901,7 +901,7 @@ namespace SAP_API.Controllers {
                 LEFT JOIN OWHS warehouse ON serie.""SeriesName"" = warehouse.""WhsCode""
                 LEFT JOIN OSLP person ON ord.""SlpCode"" = person.""SlpCode""
                 LEFT JOIN OCRD contact ON ord.""CardCode"" = contact.""CardCode""
-                Where ord.""DocStatus"" = 'O' AND ord.""DocDate"" >= add_days(CURRENT_DATE, -3) AND ord.""SlpCode"" =" + employee);
+                Where  ord.""DocDate"" >= add_days(CURRENT_DATE, -3) AND ord.""SlpCode"" =" + employee);
 
             oRecSet.MoveFirst();
             JToken orders = context.XMLTOJSON(oRecSet.GetAsXML())["ORDR"];
@@ -929,7 +929,7 @@ namespace SAP_API.Controllers {
                 LEFT JOIN OWHS warehouse ON serie.""SeriesName"" = warehouse.""WhsCode""
                 LEFT JOIN OSLP person ON ord.""SlpCode"" = person.""SlpCode""
                 LEFT JOIN OCRD contact ON ord.""CardCode"" = contact.""CardCode""
-                Where ord.""DocStatus"" = 'O' AND ord.""DocDate"" >= add_days(CURRENT_DATE, -3) ");
+                Where ord.""DocDate"" >= add_days(CURRENT_DATE, -3) ");
 
             oRecSet.MoveFirst();
             JToken orders = context.XMLTOJSON(oRecSet.GetAsXML())["ORDR"];
